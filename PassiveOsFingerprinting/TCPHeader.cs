@@ -16,6 +16,7 @@ namespace PassiveOsFingerprinting
         private short sChecksum = 555;                 //Sixteen bits for the checksum
                                                        //(checksum can be negative so taken as short)
         private ushort usUrgentPointer;           //Sixteen bits for the urgent pointer
+        private byte[] byOptions;
         //End TCP header fields
 
         private byte byHeaderLength;            //Header length
@@ -57,6 +58,9 @@ namespace PassiveOsFingerprinting
                 //calculate the header length
                 byHeaderLength = (byte)(usDataOffsetAndFlags >> 12);
                 byHeaderLength *= 4;
+
+                byOptions = new byte[byHeaderLength];
+                Array.Copy(byBuffer, 0, byOptions, 0, byHeaderLength);
 
                 //Message length = Total length of the TCP packet - Header length
                 usMessageLength = (ushort)(nReceived - byHeaderLength);
@@ -189,6 +193,21 @@ namespace PassiveOsFingerprinting
             {
                 //Return the checksum in hexadecimal format
                 return string.Format("0x{0:x2}", sChecksum);
+            }
+        }
+
+        public byte[] Options
+        {
+            get
+            {
+                byte kind;
+                byte size;
+
+
+                for (int i = 0; i < byOptions.Length; i++)
+                {
+                }
+                return byOptions;
             }
         }
 

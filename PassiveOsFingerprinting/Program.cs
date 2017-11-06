@@ -6,15 +6,19 @@ namespace PassiveOsFingerprinting
 {
     public class Program
     {
+        const string localIp = "192.168.0.14";
+        const string targetIp = "192.168.0.172";
+        const int targetPort = 22;
+
         public static void Main()
         {
             Program program = new Program();
-            program.Intercept("192.168.1.72", "192.168.1.65");
-            program.Transmit("192.168.1.65", 88);
+            program.Intercept();
+            program.Transmit();
             Console.Read();
         }
 
-        public void Intercept(string localIp, string targetIp)
+        public void Intercept()
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Raw, ProtocolType.IP);
             socket.Bind(new IPEndPoint(IPAddress.Parse(localIp), 0));
@@ -31,11 +35,8 @@ namespace PassiveOsFingerprinting
                     IPHeader ipHeader = new IPHeader(buffer, socket.EndReceive(result));
                     TCPHeader tcpHeader = new TCPHeader(ipHeader.Data, ipHeader.MessageLength);
                     PacketHeader packet = new PacketHeader(ipHeader, tcpHeader);
-
-                    if (ipHeader.DestinationAddress.ToString() == targetIp || ipHeader.SourceAddress.ToString() == targetIp)
-                    {
+                    if(localIp == ipHeader.DestinationAddress.ToString() && targetIp == ipHeader.SourceAddress.ToString() && tcpHeader.Flags.ToString().Contains("0x12"))
                         Console.WriteLine(packet.ToString());
-                    }
                 }
 
                 buffer = new byte[4096];
@@ -45,11 +46,11 @@ namespace PassiveOsFingerprinting
             socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
         }
 
-        public bool Transmit(string host, int port)
+        public bool Transmit()
         {
             using (var tcp = new TcpClient())
             {
-                var ar = tcp.BeginConnect(host, port, null, null);
+                var ar = tcp.BeginConnect(targetIp, targetPort, null, null);
                 using (ar.AsyncWaitHandle)
                 {
                     if (ar.AsyncWaitHandle.WaitOne(200, false))
@@ -68,5 +69,6 @@ namespace PassiveOsFingerprinting
             }
             return false;
         }
+
     }
 }

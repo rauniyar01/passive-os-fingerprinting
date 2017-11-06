@@ -14,10 +14,9 @@ namespace PassiveOsFingerprinting
             TtlTest(packetHeader.mIpHeader.TTL);
             DfTest(packetHeader.mIpHeader.Flags);
             IpIdTest(packetHeader.mIpHeader.Identification);
-            WindowSizeTest(packetHeader.mTcpHeader.WindowSize);
-            AckFlagTest(packetHeader.mTcpHeader.AcknowledgementNumber, packetHeader.mTcpHeader.Flags);
+            //WindowSizeTest(packetHeader.mTcpHeader.WindowSize);
 
-            var max = mGamma.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+            string max = mGamma.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
             return max;
         }
 
@@ -149,17 +148,17 @@ namespace PassiveOsFingerprinting
             }
         }
 
-        private static void WindowSizeTest(string packetWindowSize)
+        private static void WindowSizeTest(string packetWindowSize, string packetOptions)
         {
             var ws = Int32.Parse(packetWindowSize);
+            var mss = packetOptions;
             var modifier = 1;
         }
 
-        private static void AckFlagTest(string packetAckNum, string packetFlags)
+        private static void TcpOrderOptionsTest(string packetOptions)
         {
-            var an = packetAckNum;
-            var af = packetFlags.Contains("ACK");
-            var modifier = 1;
+            var o = packetOptions;
+            var modifier = 2.5;
         }
 
         private static void InitDictionary()

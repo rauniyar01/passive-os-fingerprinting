@@ -14,8 +14,8 @@
         public override string ToString()
         {
             return mIpHeader.SourceAddress + ":" + mTcpHeader.SourcePort + " > " +
-                mIpHeader.DestinationAddress + ":" + mTcpHeader.DestinationPort + " ( " +
-                mTcpHeader.Flags + " " + OSFingerprint.DetermineOS(this) + " ) ";
+                mIpHeader.DestinationAddress + ":" + mTcpHeader.DestinationPort + " (" +
+                OSFingerprint.DetermineOS(this) + ")";
         }
 
     }
