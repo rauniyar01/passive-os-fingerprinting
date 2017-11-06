@@ -1,4 +1,6 @@
-﻿namespace PassiveOsFingerprinting
+﻿using System;
+
+namespace PassiveOsFingerprinting
 {
     public class PacketHeader
     {
@@ -9,6 +11,10 @@
         {
             mIpHeader = ipHeader;
             mTcpHeader = tcpHeader;
+
+            String b = mTcpHeader.Options;
+            Console.WriteLine(b);
+
         }
 
         public override string ToString()

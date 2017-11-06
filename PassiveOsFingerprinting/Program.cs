@@ -6,9 +6,9 @@ namespace PassiveOsFingerprinting
 {
     public class Program
     {
-        const string localIp = "192.168.0.14";
-        const string targetIp = "192.168.0.172";
-        const int targetPort = 22;
+        const string localIp = "192.168.1.72";
+        const string targetIp = "192.168.1.65";
+        const int targetPort = 88;
 
         public static void Main()
         {
@@ -35,8 +35,6 @@ namespace PassiveOsFingerprinting
                     IPHeader ipHeader = new IPHeader(buffer, socket.EndReceive(result));
                     TCPHeader tcpHeader = new TCPHeader(ipHeader.Data, ipHeader.MessageLength);
                     PacketHeader packet = new PacketHeader(ipHeader, tcpHeader);
-                    if(localIp == ipHeader.DestinationAddress.ToString() && targetIp == ipHeader.SourceAddress.ToString() && tcpHeader.Flags.ToString().Contains("0x12"))
-                        Console.WriteLine(packet.ToString());
                 }
 
                 buffer = new byte[4096];

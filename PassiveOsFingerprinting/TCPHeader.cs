@@ -1,6 +1,7 @@
 using System.Net;
 using System;
 using System.IO;
+using System.Text;
 
 namespace PassiveOsFingerprinting
 {
@@ -16,7 +17,7 @@ namespace PassiveOsFingerprinting
         private short sChecksum = 555;                 //Sixteen bits for the checksum
                                                        //(checksum can be negative so taken as short)
         private ushort usUrgentPointer;           //Sixteen bits for the urgent pointer
-        private byte[] byOptions;
+        private byte[] byOptions = new byte[40];
         //End TCP header fields
 
         private byte byHeaderLength;            //Header length
@@ -59,8 +60,7 @@ namespace PassiveOsFingerprinting
                 byHeaderLength = (byte)(usDataOffsetAndFlags >> 12);
                 byHeaderLength *= 4;
 
-                byOptions = new byte[byHeaderLength];
-                Array.Copy(byBuffer, 0, byOptions, 0, byHeaderLength);
+                Array.Copy(byBuffer, 20, byOptions, 0, byHeaderLength - 20);
 
                 //Message length = Total length of the TCP packet - Header length
                 usMessageLength = (ushort)(nReceived - byHeaderLength);
@@ -196,18 +196,29 @@ namespace PassiveOsFingerprinting
             }
         }
 
-        public byte[] Options
+        public String Options
         {
             get
             {
-                byte kind;
-                byte size;
-
-
-                for (int i = 0; i < byOptions.Length; i++)
+                StringBuilder builder = new StringBuilder();
+                byte index = 0, length;
+                int value;
+                while (byOptions[index] != 0)
                 {
+                    if (byOptions[index] == 1)
+                    {
+                        builder.Append("NOP");
+                        index++;
+                    } else
+                    {
+                        builder.Append(byOptions[index]);
+                        length = byOptions[index + 1];
+                        value = BitConverter.ToInt32(byOptions, index + length);
+                        index++;
+                    }
                 }
-                return byOptions;
+
+                return builder.ToString();
             }
         }
 
