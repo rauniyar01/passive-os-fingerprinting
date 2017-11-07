@@ -64,7 +64,7 @@ namespace PassiveOsFingerprinting
                 byHeaderLength *= 4;
 
                 Array.Copy(byBuffer, 20, byOptions, 0, byHeaderLength - 20);
-                stOptions = ParseOptions();
+                stOptions = (string)ParseOptionalFields(byOptions);
 
                 //Message length = Total length of the TCP packet - Header length
                 usMessageLength = (ushort)(nReceived - byHeaderLength);
@@ -200,30 +200,30 @@ namespace PassiveOsFingerprinting
             }
         }
 
-        public string ParseOptions()
+        public string ParseOptionalFields(byte[] options)
         {
             StringBuilder builder = new StringBuilder();
             byte index = 0, modifier = 1;
             byte[] tmp;
 
-            while (byOptions[index] != 0)
+            while (options[index] != 0)
             {
-                builder.Append(byOptions[index]);
-                if (byOptions[index] == 1)
+                builder.Append(options[index]);
+                if (options[index] == 1)
                 {
                     modifier = 1;
                 }
                 else
                 {
-                    modifier = byOptions[index + 1];
+                    modifier = options[index + 1];
                     if (modifier == 3)
                     {
-                        bWindowScale = byOptions[index + 2];
+                        bWindowScale = options[index + 2];
                     }
                     else if (modifier == 4)
                     {
                         tmp = new byte[modifier - 2];
-                        Array.Copy(byOptions, index + 2, tmp, 0, modifier - 2);
+                        Array.Copy(options, index + 2, tmp, 0, modifier - 2);
                         Array.Reverse(tmp);
                         uiMaxSegmentSize = BitConverter.ToUInt16(tmp, 0);
                     }
@@ -233,7 +233,7 @@ namespace PassiveOsFingerprinting
             return builder.ToString();
         }
 
-        public String Options
+        public string Options
         {
             get
             {

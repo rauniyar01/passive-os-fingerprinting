@@ -222,8 +222,8 @@ namespace PassiveOsFingerprinting
         {
             var o = packetOptions;
             var modifier = 2.5;
-            Console.WriteLine(packetOptions);
 
+            Console.WriteLine(o);
         }
 
         private static void InitDictionary()
