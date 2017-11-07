@@ -14,7 +14,9 @@ namespace PassiveOsFingerprinting
             TtlTest(packetHeader.mIpHeader.TTL);
             DfTest(packetHeader.mIpHeader.Flags);
             IpIdTest(packetHeader.mIpHeader.Identification);
-            //WindowSizeTest(packetHeader.mTcpHeader.WindowSize);
+            WindowSizeTest(packetHeader.mTcpHeader.WindowSize, packetHeader.mTcpHeader.MaxSegmentSize);
+            WindowScaleTest(packetHeader.mTcpHeader.WindowScale);
+            TcpOrderOptionsTest(packetHeader.mTcpHeader.Options);
 
             string max = mGamma.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
             return max;
@@ -148,17 +150,80 @@ namespace PassiveOsFingerprinting
             }
         }
 
-        private static void WindowSizeTest(string packetWindowSize, string packetOptions)
+        private static void WindowSizeTest(string packetWindowSize, uint packetMaxSegSize)
         {
             var ws = Int32.Parse(packetWindowSize);
-            var mss = packetOptions;
+            var mss = packetMaxSegSize;
             var modifier = 1;
+        }
+
+        private static void WindowScaleTest(byte packetWindowScale)
+        {
+            var ws = packetWindowScale;
+            var modifier = 1;
+
+            if (ws == 255) // no window scale set
+            {
+                mGamma["Linux 1.2"] += modifier;
+                mGamma["Linux 2.0"] += modifier;
+                mGamma["Linux 2.0.3x"] += modifier;
+
+                mGamma["Windows 3.11"] += modifier;
+                mGamma["Windows 95"] += modifier;
+                mGamma["Windows 95b"] += modifier;
+                mGamma["Windows 98"] += modifier;
+                mGamma["Windows ME no SP"] += modifier;
+                mGamma["Windows 2000 SP2+"] += modifier;
+                mGamma["Windows 2000 SP3"] += modifier;
+                mGamma["Windows 2000 SP4"] += modifier;
+                mGamma["Windows XP SP1+"] += modifier;
+                mGamma["Windows 2K3"] += modifier;
+
+                mGamma["MacOS 8.1-8.6"] += modifier;
+                mGamma["MacOS 9.1"] += modifier;
+            }
+            else if (ws == 0)
+            {
+                mGamma["Linux 2.2"] += modifier;
+                mGamma["Linux 2.4"] += modifier;
+                mGamma["Linux 2.6"] += modifier;
+
+                mGamma["Windows XP SP1+"] += modifier;
+                mGamma["Windows 2K3"] += modifier;
+
+                mGamma["MacOS 7.3-8.6"] += modifier;
+                mGamma["MacOS 8.6"] += modifier;
+                mGamma["MacOS 9.0-9.2"] += modifier;
+                mGamma["MacOS 10.2.6"] += modifier;
+            }
+            else if (ws == 1)
+            {
+                mGamma["Linux 2.4"] += modifier;
+                mGamma["Linux 2.6"] += modifier;
+            }
+            else if (ws == 2)
+            {
+                mGamma["Linux 2.4"] += modifier;
+                mGamma["Linux 2.6"] += modifier;
+
+                mGamma["Windows 2K3"] += modifier;
+            }
+            else if (ws == 5 || ws == 6 || ws == 7)
+            {
+                mGamma["Linux 2.6"] += modifier;
+            }
+            else if (ws == 8)
+            {
+                mGamma["Windows Vista (beta)"] += modifier;
+            }
         }
 
         private static void TcpOrderOptionsTest(string packetOptions)
         {
             var o = packetOptions;
             var modifier = 2.5;
+            Console.WriteLine(packetOptions);
+
         }
 
         private static void InitDictionary()

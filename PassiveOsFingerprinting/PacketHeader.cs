@@ -11,10 +11,6 @@ namespace PassiveOsFingerprinting
         {
             mIpHeader = ipHeader;
             mTcpHeader = tcpHeader;
-
-            String b = mTcpHeader.Options;
-            Console.WriteLine(b);
-
         }
 
         public override string ToString()

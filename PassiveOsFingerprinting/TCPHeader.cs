@@ -18,6 +18,9 @@ namespace PassiveOsFingerprinting
                                                        //(checksum can be negative so taken as short)
         private ushort usUrgentPointer;           //Sixteen bits for the urgent pointer
         private byte[] byOptions = new byte[40];
+        private string stOptions;
+        private uint uiMaxSegmentSize = 0;
+        private byte bWindowScale = 255;
         //End TCP header fields
 
         private byte byHeaderLength;            //Header length
@@ -61,6 +64,7 @@ namespace PassiveOsFingerprinting
                 byHeaderLength *= 4;
 
                 Array.Copy(byBuffer, 20, byOptions, 0, byHeaderLength - 20);
+                stOptions = ParseOptions();
 
                 //Message length = Total length of the TCP packet - Header length
                 usMessageLength = (ushort)(nReceived - byHeaderLength);
@@ -196,22 +200,44 @@ namespace PassiveOsFingerprinting
             }
         }
 
+        public string ParseOptions()
+        {
+            StringBuilder builder = new StringBuilder();
+            byte index = 0, modifier = 1;
+            byte[] tmp;
+
+            while (byOptions[index] != 0)
+            {
+                builder.Append(byOptions[index]);
+                if (byOptions[index] == 1)
+                {
+                    modifier = 1;
+                }
+                else
+                {
+                    modifier = byOptions[index + 1];
+                    if (modifier == 3)
+                    {
+                        bWindowScale = byOptions[index + 2];
+                    }
+                    else if (modifier == 4)
+                    {
+                        tmp = new byte[modifier - 2];
+                        Array.Copy(byOptions, index + 2, tmp, 0, modifier - 2);
+                        Array.Reverse(tmp);
+                        uiMaxSegmentSize = BitConverter.ToUInt16(tmp, 0);
+                    }
+                }
+                index += modifier;
+            }
+            return builder.ToString();
+        }
+
         public String Options
         {
             get
             {
-                StringBuilder builder = new StringBuilder();
-                byte index = 0, modifier = 1;
-                while (byOptions[index] != 0)
-                {
-                    builder.Append(byOptions[index]);
-                    if (byOptions[index] != 1)
-                        modifier = byOptions[index + 1];
-                    else
-                        modifier = 1;
-                    index += modifier;
-                }
-                return builder.ToString();
+                return stOptions;
             }
         }
 
@@ -220,6 +246,22 @@ namespace PassiveOsFingerprinting
             get
             {
                 return byTCPData;
+            }
+        }
+
+        public uint MaxSegmentSize
+        {
+            get
+            {
+                return uiMaxSegmentSize;
+            }
+        }
+
+        public byte WindowScale
+        {
+            get
+            {
+                return bWindowScale;
             }
         }
 
