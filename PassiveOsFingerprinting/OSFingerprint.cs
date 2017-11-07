@@ -223,7 +223,71 @@ namespace PassiveOsFingerprinting
             var o = packetOptions;
             var modifier = 2.5;
 
-            Console.WriteLine(o);
+            if (o == "2")
+            {
+                mGamma["Linux 1.2"] += modifier;
+                mGamma["Linux 2.0"] += modifier;
+                mGamma["Linux 2.0.3x"] += modifier;
+
+                mGamma["Windows 3.11"] += modifier;
+                mGamma["Windows NT 4.0 SP6a"] += modifier;
+                mGamma["Windows 2K3"] += modifier;
+            }
+            else if (o == "24813")
+            {
+                mGamma["Linux 2.2"] += modifier;
+                mGamma["Linux 2.4"] += modifier;
+                mGamma["Linux 2.6"] += modifier;
+            }
+            else if (o == "213118114")
+            {
+                mGamma["Windows 95"] += modifier;
+                mGamma["Windows 95b"] += modifier;
+                mGamma["Windows 2000 SP4"] += modifier;
+                mGamma["Windows XP SP1+"] += modifier;
+                mGamma["Windows 2K3"] += modifier;
+                mGamma["Windows 98"] += modifier;
+
+            }
+            else if (o == "213114")
+            {
+                mGamma["Windows 98"] += modifier;
+                mGamma["Windows 2K3"] += modifier;
+            }
+            else if (o == "2114")
+            {
+                mGamma["Windows ME no SP"] += modifier;
+                mGamma["Windows 2000 SP2+"] += modifier;
+                mGamma["Windows 2000 SP3"] += modifier;
+                mGamma["Windows 2000 SP4"] += modifier;
+                mGamma["Windows XP SP1+"] += modifier;
+                mGamma["Windows 98"] += modifier;
+            }
+            else if (o == "231114")
+            {
+                mGamma["Windows Vista (beta)"] += modifier;
+            }
+            else if (o == "23")
+            {
+                mGamma["MacOS 7.3-8.6"] += modifier;
+                mGamma["MacOS 8.6"] += modifier;
+            }
+            else if (o == "2111")
+            {
+                mGamma["MacOS 8.1-8.6"] += modifier;
+            }
+            else if (o == "231")
+            {
+                mGamma["MacOS 9.0-9.2"] += modifier;
+            }
+            else if (o == "21111")
+            {
+                mGamma["MacOS 9.1"] += modifier;
+            }
+            else if (o == "213118")
+            {
+                mGamma["MacOS 10.2.6"] += modifier;
+            }
         }
 
         private static void InitDictionary()
