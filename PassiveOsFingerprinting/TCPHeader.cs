@@ -201,23 +201,19 @@ namespace PassiveOsFingerprinting
             get
             {
                 StringBuilder builder = new StringBuilder();
-                byte index = 0, length;
-                int value;
+                byte index = 0;
                 while (byOptions[index] != 0)
                 {
+                    builder.Append(byOptions[index]);
                     if (byOptions[index] == 1)
                     {
-                        builder.Append("NOP");
-                        index++;
-                    } else
+                        index += 1;
+                    }
+                    else
                     {
-                        builder.Append(byOptions[index]);
-                        length = byOptions[index + 1];
-                        value = BitConverter.ToInt32(byOptions, index + length);
-                        index++;
+                        index += byOptions[index + 1];
                     }
                 }
-
                 return builder.ToString();
             }
         }
