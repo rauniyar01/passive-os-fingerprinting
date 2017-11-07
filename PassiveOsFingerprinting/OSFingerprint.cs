@@ -155,6 +155,132 @@ namespace PassiveOsFingerprinting
             var ws = Int32.Parse(packetWindowSize);
             var mss = packetMaxSegSize;
             var modifier = 1;
+
+            if (ws <= (mss + 50) && ws >= (mss - 50))
+            {
+                mGamma["Linux 1.2"] += modifier;
+            }
+            else if (ws <= (32736 + 70) && ws >= (32736 - 70))
+            {
+                mGamma["Linux 2.0"] += modifier;
+            }
+            else if ((ws <= (512 + 50) && ws >= 512 - 50) || 
+                (ws <= (16384 + 70) && ws >= 16384 - 70))
+            {
+                mGamma["Linux 2.0.3x"] += modifier;
+            }
+            else if ((ws <= ((mss * 11) + 70) && ws >= ((mss * 11) - 70)) || 
+                (ws <= ((mss * 20) + 70) && (ws >= (mss * 20) - 70)))
+            {
+                mGamma["Linux 2.2"] += modifier;
+            }
+            else if (((ws <= (mss * 2) + 70) && (ws >= (mss * 2) - 70)) ||
+              ((ws <= (mss * 3) + 70) && (ws >= (mss * 3) - 70)) ||
+              ((ws <= (mss * 4) + 70) && (ws >= (mss * 4) - 70)))
+            {
+                mGamma["Linux 2.4"] += modifier;
+                mGamma["Linux 2.6"] += modifier;
+            }
+            else if ((ws <= (8192 + 70)) && (ws >= (8192 - 70)))
+            {
+                mGamma["Windows 3.11"] += modifier;
+            }
+            else if (((ws <= (mss * 44) + 70) && (ws >= (mss * 44) - 70)))
+            {
+                mGamma["Windows 95"] += modifier;
+            }
+            else if ((ws <= (8192 + 70)) && (ws >= (8192 - 70)))
+            {
+                mGamma["Windows 95b"] += modifier;
+            }
+            else if ((ws <= 65535) && (ws >= (65535 - 70)) ||
+              (ws <= (8192 + 70)) && (ws >= (8192 - 70)) ||
+              (ws <= (32767 + 70)) && (ws >= (32767 - 70)) ||
+              (ws <= (37300 + 70)) && (ws >= (37300 - 70)) ||
+              (ws <= (46080 + 70)) && (ws >= (46080 - 70)) ||
+              (ws <= (60352 + 70)) && (ws >= (60352 - 70)) ||
+              ((ws <= (mss * 44) + 70) && (ws >= (mss * 44) - 70)) ||
+              ((ws <= (mss * 4) + 70) && (ws >= (mss * 4) - 70)) ||
+              ((ws <= (mss * 6) + 70) && (ws >= (mss * 6) - 70)) ||
+              ((ws <= (mss * 12) + 70) && (ws >= (mss * 12) - 70)) ||
+              ((ws <= (mss * 16) + 70) && (ws >= (mss * 16) - 70)) ||
+              ((ws <= (mss * 26) + 70) && (ws >= (mss * 26) - 70)))
+            {
+                mGamma["Windows 98"] += modifier;
+            }
+            else if ((ws <= (44620 + 70)) && (ws >= (44620 - 70)))
+            {
+                mGamma["Windows ME no SP"] += modifier;
+            }
+            else if ((ws <= (64512 + 70)) && (ws >= (64512 - 70)))
+            {
+                mGamma["Windows NT 4.0 SP6a"] += modifier;
+            }
+            else if ((ws <= (64512 + 70)) && (ws >= (64512 - 70)))
+            {
+                mGamma["Windows NT 4.0 SP6a"] += modifier;
+            }
+            else if ((ws <= (8192 + 70)) && (ws >= (8192 - 70)) ||
+              ((ws <= (mss * 6) + 70) && (ws >= (mss * 6) - 70)))
+            {
+                mGamma["Windows 2000 SP2+"] += modifier;
+            }
+            else if ((ws <= (64512 + 70)) && (ws >= (64512 - 70)) ||
+              ((ws <= (mss * 44) + 70) && (ws >= (mss * 44) - 70)))
+            {
+                mGamma["Windows 2000 SP3"] += modifier;
+            }
+            else if ((ws <= 65535) && (ws >= (65535 - 70)) ||
+              (ws <= (40320 + 70)) && (ws >= (40320 - 70)) ||
+              (ws <= (32767 + 70)) && (ws >= (32767 - 70)) ||
+              ((ws <= (mss * 45) + 70) && (ws >= (mss * 45) - 70)))
+            {
+                mGamma["Windows 2000 SP4"] += modifier;
+            }
+            else if ((ws <= 65535) && (ws >= (65535 - 70)) ||
+              (ws <= (8192 + 70)) && (ws >= (8192 - 70)) ||
+              (ws <= (64512 + 70)) && (ws >= (64512 - 70)) ||
+              (ws <= (32767 + 70)) && (ws >= (32767 - 70)) ||
+              ((ws <= (mss * 45) + 70) && (ws >= (mss * 45) - 70)) ||
+              ((ws <= (mss * 44) + 70) && (ws >= (mss * 44) - 70)) ||
+              ((ws <= (mss * 12) + 70) && (ws >= (mss * 12) - 70)))
+            {
+                mGamma["Windows XP SP1+"] += modifier;
+            }
+            else if ((ws <= 65535) && (ws >= (65535 - 70)) ||
+              (ws <= (32768 + 70)) && (ws >= (32768 - 70)) ||
+              (ws <= (16384 + 70)) && (ws >= (16384 - 70)))
+            {
+                mGamma["Windows 2K3"] += modifier;
+            }
+            else if ((ws <= (8192 + 70)) && (ws >= (8192 - 70)))
+            {
+                mGamma["Windows Vista (beta)"] += modifier;
+            }
+            else if ((ws <= (16616 + 70)) && (ws >= (16616 - 70)))
+            {
+                mGamma["MacOS 7.3-8.6"] += modifier;
+                mGamma["MacOS 8.1-8.6"] += modifier;
+            }
+            else if (((ws <= (mss * 2) + 70) && (ws >= (mss * 2) - 70)))
+            {
+                mGamma["MacOS 8.6"] += modifier;
+            }
+            else if ((ws <= (32768 + 70)) && (ws >= (32768 - 70)))
+            {
+                mGamma["MacOS 9.0-9.2"] += modifier;
+            }
+            else if (((ws <= (32768 + 70)) && (ws >= (32768 - 70))) ||
+              ((ws <= 65535) && (ws >= (65535 - 70))))
+            {
+                mGamma["MacOS 9.1"] += modifier;
+            }
+            else if ((ws <= (33304 + 70)) && (ws >= (33304 - 70)))
+            {
+                mGamma["MacOS 10.2.6"] += modifier;
+            }
+
+
         }
 
         private static void WindowScaleTest(byte packetWindowScale)
