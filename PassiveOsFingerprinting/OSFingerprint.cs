@@ -14,7 +14,7 @@ namespace PassiveOsFingerprinting
             TtlTest(packetHeader.mIpHeader.TTL);
             DfTest(packetHeader.mIpHeader.Flags);
             IpIdTest(packetHeader.mIpHeader.Identification);
-            WindowSizeTest(packetHeader.mTcpHeader.WindowSize, packetHeader.mTcpHeader.MaxSegmentSize);
+            //WindowSizeTest(packetHeader.mTcpHeader.WindowSize, packetHeader.mTcpHeader.MaxSegmentSize);
             WindowScaleTest(packetHeader.mTcpHeader.WindowScale);
             TcpOrderOptionsTest(packetHeader.mTcpHeader.Options);
 
